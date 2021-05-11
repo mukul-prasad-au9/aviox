@@ -5,7 +5,6 @@ const AddTransaction = (props) => {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("credit");
-  const [running, setRunning] = useState(50000);
   //submit function
   const submitInfo = () => {
     //getting curr date
@@ -17,15 +16,16 @@ const AddTransaction = (props) => {
     var curr = yyyy + "/" + mm + "/" + dd;
     //debit the value from total
     if (type === "debit") {
-      balance = running - amount;
+      balance = parseInt(localStorage.getItem("running")) - parseInt(amount);
     }
     //credit the value from total
     if (type === "credit") {
-      balance = running + parseInt(amount);
+      balance = parseInt(localStorage.getItem("running")) + parseInt(amount);
     }
     let previous = localStorage.getItem("value");
     //setting value in localstorage
     if (previous == null) {
+      localStorage.setItem("running", "50000");
       localStorage.setItem(
         "value",
         JSON.stringify([
@@ -34,7 +34,7 @@ const AddTransaction = (props) => {
             description: desc,
             amount: amount,
             type: type,
-            balance: balance,
+            balance: localStorage.getItem("running"),
           },
         ])
       );
@@ -52,6 +52,7 @@ const AddTransaction = (props) => {
       //concating two arrays
       var Combined = PrevV.concat(newV);
       localStorage.setItem("value", JSON.stringify(Combined));
+      localStorage.setItem("running", balance);
     }
     //redirecting towards homepage
     props.history.push("/");

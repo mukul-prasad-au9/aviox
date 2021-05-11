@@ -5,6 +5,7 @@ const AddTransaction = (props) => {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("credit");
+  const [running, setRunning] = useState(50000);
   //submit function
   const submitInfo = () => {
     //getting curr date
@@ -16,25 +17,42 @@ const AddTransaction = (props) => {
     var curr = yyyy + "/" + mm + "/" + dd;
     //debit the value from total
     if (type === "debit") {
-      balance = localStorage.getItem("balance") - amount;
-      localStorage.setItem("balance", balance);
+      balance = running - amount;
     }
     //credit the value from total
     if (type === "credit") {
-      balance = parseInt(localStorage.getItem("balance")) + parseInt(amount);
-      localStorage.setItem("balance", balance);
+      balance = running + parseInt(amount);
     }
+    let previous = localStorage.getItem("value");
     //setting value in localstorage
-    localStorage.setItem("value", [
-      localStorage.getItem("value"),
-      JSON.stringify({
-        date: curr,
-        description: desc,
-        amount: amount,
-        type: type,
-        balance: balance,
-      }),
-    ]);
+    if (previous == null) {
+      localStorage.setItem(
+        "value",
+        JSON.stringify([
+          {
+            date: curr,
+            description: desc,
+            amount: amount,
+            type: type,
+            balance: balance,
+          },
+        ])
+      );
+    } else {
+      var PrevV = JSON.parse(localStorage.getItem("value"));
+      var newV = [
+        {
+          date: curr,
+          description: desc,
+          amount: amount,
+          type: type,
+          balance: balance,
+        },
+      ];
+      //concating two arrays
+      var Combined = PrevV.concat(newV);
+      localStorage.setItem("value", JSON.stringify(Combined));
+    }
     //redirecting towards homepage
     props.history.push("/");
   };

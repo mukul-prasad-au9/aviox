@@ -59,60 +59,58 @@ const AddTransaction = (props) => {
   };
   //jsx part
   return (
-    <div className="d-flex mt-5 align-items-center">
-      <div className="container" style={{ border: "solid black" }}>
+    <div className="container mt-5" style={{ border: "solid black" }}>
+      <h2>New Transaction</h2>
+
+      <div className="d-flex flex-column container p-5">
+        <div className="d-flex">
+          <span>Transaction Type:</span>
+          <select
+            className="btn btn-light"
+            onChange={(e) => {
+              setType(e.target.value);
+            }}
+          >
+            <option value="credit">Credit</option>
+            <option value="debit">Debit</option>
+          </select>
+        </div>
+        <div className="d-flex">
+          <span>Amount</span>
+          <input
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+            className="form-control"
+            type="number"
+            name="amount"
+          />
+        </div>
+        <div className="d-flex">
+          <span>Description</span>
+          <input
+            value={desc}
+            onChange={(e) => {
+              setDesc(e.target.value);
+            }}
+            className="form-control"
+            type="text"
+            name="description"
+          />
+        </div>
         <div className="d-flex justify-content-center">
-          <div className="d-flex flex-column">
-            <h2>New Transaction</h2>
-            <div className="d-flex justify-content-around">
-              <span>Transaction Type:</span>
-              <select
-                className="btn btn-light"
-                onChange={(e) => {
-                  setType(e.target.value);
-                }}
-              >
-                <option value="credit">Credit</option>
-                <option value="debit">Debit</option>
-              </select>
-            </div>
-            <div className="d-flex justify-content-around">
-              <span>Amount</span>
-              <input
-                value={amount}
-                onChange={(e) => {
-                  setAmount(e.target.value);
-                }}
-                type="number"
-                name="amount"
-              />
-            </div>
-            <div className="d-flex justify-content-around">
-              <span>Description</span>
-              <input
-                value={desc}
-                onChange={(e) => {
-                  setDesc(e.target.value);
-                }}
-                className="input-control"
-                type="text"
-                name="description"
-              />
-            </div>
-            <div className="d-flex justify-content-around">
-              <button onClick={submitInfo} className="btn btn-success">
-                Submit
-              </button>
-              <button
-                onClick={() => {
-                  props.history.push("/");
-                }}
-                className="btn btn-light"
-              >
-                xCancel
-              </button>
-            </div>
-          </div>
+          <button onClick={submitInfo} className="btn btn-success">
+            Submit
+          </button>
+          <button
+            onClick={() => {
+              props.history.push("/");
+            }}
+            className="btn btn-light"
+          >
+            xCancel
+          </button>
         </div>
       </div>
     </div>

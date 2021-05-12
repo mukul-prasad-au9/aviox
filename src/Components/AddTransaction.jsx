@@ -5,8 +5,23 @@ const AddTransaction = (props) => {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("credit");
+  const [msg, setMsg] = useState("");
   //submit function
   const submitInfo = () => {
+    if (type === "debit") {
+      if (amount > localStorage.getItem("running")) {
+        setMsg(
+          `cannot debit more than current balance ${localStorage.getItem(
+            "running"
+          )}`
+        );
+        return;
+      }
+      if (parseInt(localStorage.getItem("running")) === 0) {
+        setMsg("cannot debit from 0 running balance");
+        return;
+      }
+    }
     //getting curr date
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
@@ -25,7 +40,8 @@ const AddTransaction = (props) => {
     let previous = localStorage.getItem("value");
     //setting value in localstorage
     if (previous == null) {
-      localStorage.setItem("running", "50000");
+      localStorage.setItem("running", 0);
+      balance = parseInt(localStorage.getItem("running")) + parseInt(amount);
       localStorage.setItem(
         "value",
         JSON.stringify([
@@ -34,10 +50,11 @@ const AddTransaction = (props) => {
             description: desc,
             amount: amount,
             type: type,
-            balance: localStorage.getItem("running"),
+            balance: balance,
           },
         ])
       );
+      localStorage.setItem("running", balance);
     } else {
       var PrevV = JSON.parse(localStorage.getItem("value"));
       var newV = [
@@ -61,7 +78,7 @@ const AddTransaction = (props) => {
   return (
     <div className="container mt-5" style={{ border: "solid black" }}>
       <h2>New Transaction</h2>
-
+      <p>{msg}</p>
       <div className="d-flex flex-column container p-5">
         <div className="d-flex">
           <span>Transaction Type:</span>

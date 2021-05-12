@@ -22,6 +22,7 @@ const AddTransaction = (props) => {
         return;
       }
     }
+
     //getting curr date
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
@@ -74,11 +75,17 @@ const AddTransaction = (props) => {
     //redirecting towards homepage
     props.history.push("/");
   };
+  //validating for e ,E and +, -
+  const validateAmount = (e) => {
+    if (e.key === "E" || e.key === "e" || e.key === "+" || e.key === "-") {
+      e.preventDefault();
+    }
+  };
   //jsx part
   return (
     <div className="container mt-5" style={{ border: "solid black" }}>
       <h2>New Transaction</h2>
-      <p>{msg}</p>
+      <p className="text-center text-danger">{msg}</p>
       <div className="d-flex flex-column container p-5">
         <div className="d-flex">
           <span>Transaction Type:</span>
@@ -99,6 +106,7 @@ const AddTransaction = (props) => {
             onChange={(e) => {
               setAmount(e.target.value);
             }}
+            onKeyDown={validateAmount}
             className="form-control"
             type="number"
             name="amount"
